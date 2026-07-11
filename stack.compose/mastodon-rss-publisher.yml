@@ -45,6 +45,7 @@ services:
     command: ["bash", "-c", "while true; do bash /opt/mastodon/bin/bootstrap-rss-accounts.sh || true; sleep 300; done"]
 
   mastodon-rss-publisher:
+    image: webservices/mastodon-rss-publisher:local-build
     build:
       context: .
       dockerfile: ./stack.containers/mastodon-rss-publisher/Dockerfile
