@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "mastodon-rss-publisher",
+  "repo": "mastodon-rss-publisher-stack-module",
+  "runtimeId": "mastodon-rss-publisher",
+  "lifecycle": "active",
+  "dependencies": ["mastodon"],
+  "runtimeDependencies": ["mastodon"],
+  "ciProfiles": ["module"],
+  "smoke": "external-only",
+  "smokeUnsupportedReason": "requires a running Mastodon database and local API service identities",
+  "overlays": [
+    "stack.compose/mastodon-rss-publisher.yml",
+    "stack.config/components.json",
+    "stack.config/mastodon-rss/feeds.d",
+    "stack.config/mastodon-rss/bootstrap-rss-accounts.sh",
+    "stack.containers/mastodon-rss-publisher"
+  ],
+  "testAssets": []
+}

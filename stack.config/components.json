@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "defaultComponents": [],
+  "components": {
+    "mastodon-rss-publisher": {
+      "name": "Mastodon RSS Publisher",
+      "description": "Self-hosted RSS and Atom feeds published through local Mastodon accounts.",
+      "dependencies": ["mastodon"],
+      "composeFiles": ["mastodon-rss-publisher.yml"]
+    }
+  }
+}
