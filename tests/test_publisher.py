@@ -24,6 +24,7 @@ class PublisherTest(unittest.TestCase):
         self.assertNotIn("<p>", value)
         self.assertIn("Source · Australia", value)
         self.assertIn("#News #Australia", value)
+        self.assertLessEqual(len(value.split("\n\n")[1]), 96)
 
     def test_summary_repeating_title_is_omitted(self):
         value = publisher.status({"source": "ABC", "region": "TAS"}, {"title": "Storm reaches Hobart", "summary": "Storm reaches Hobart with damaging winds", "link": "https://example.test"})
