@@ -21,6 +21,7 @@ API_URL = os.environ.get("MASTODON_RSS_API_URL", "http://mastodon-web:3000").rst
 POLL_SECONDS = int(os.environ.get("MASTODON_RSS_POLL_SECONDS", "900"))
 BUCKET_DAYS = int(os.environ.get("MASTODON_RSS_BUCKET_DAYS", "7"))
 TITLE_SIMILARITY = float(os.environ.get("MASTODON_RSS_TITLE_SIMILARITY", "0.88"))
+USER_AGENT = "mastodon-rss-publisher/1.0"
 
 def text(value):
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html.unescape(value or ""))).strip()
@@ -170,6 +171,7 @@ def publish(token, value):
     request = urllib.request.Request(f"{API_URL}/api/v1/statuses", data=json.dumps({"status": value}).encode(), method="POST")
     request.add_header("Authorization", f"Bearer {token}")
     request.add_header("Content-Type", "application/json")
+    request.add_header("User-Agent", USER_AGENT)
     with urllib.request.urlopen(request, timeout=20):
         pass
 
@@ -180,6 +182,7 @@ def sample_observer_timeline():
     observer = json.loads(observer_path.read_text())
     request = urllib.request.Request(f"{API_URL}/api/v1/timelines/home?limit=40")
     request.add_header("Authorization", f"Bearer {observer['token']}")
+    request.add_header("User-Agent", USER_AGENT)
     with urllib.request.urlopen(request, timeout=20) as response:
         statuses = json.loads(response.read())
     sources = {}

@@ -57,7 +57,7 @@ services:
     environment:
       MASTODON_RSS_FEED_DIR: /configs/mastodon-rss/feeds.d
       MASTODON_RSS_STATE_DIR: /state
-      MASTODON_RSS_API_URL: http://mastodon-web:3000
+      MASTODON_RSS_API_URL: https://mastodon.${DOMAIN}
       MASTODON_RSS_POLL_SECONDS: ${MASTODON_RSS_POLL_SECONDS:-900}
       MASTODON_RSS_BUCKET_DAYS: ${MASTODON_RSS_BUCKET_DAYS:-7}
     volumes:
