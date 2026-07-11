@@ -173,6 +173,32 @@ def publish(token, value):
     with urllib.request.urlopen(request, timeout=20):
         pass
 
+def sample_observer_timeline():
+    observer_path = STATE_DIR / "observer.json"
+    if not observer_path.exists():
+        return None
+    observer = json.loads(observer_path.read_text())
+    request = urllib.request.Request(f"{API_URL}/api/v1/timelines/home?limit=40")
+    request.add_header("Authorization", f"Bearer {observer['token']}")
+    with urllib.request.urlopen(request, timeout=20) as response:
+        statuses = json.loads(response.read())
+    sources = {}
+    sampled = []
+    for item in statuses:
+        account = item.get("account", {}).get("acct", "unknown")
+        sources[account] = sources.get(account, 0) + 1
+        sampled.append({"id": item.get("id"), "created_at": item.get("created_at"), "account": account, "url": item.get("url")})
+    report = {
+        "sampled_at": datetime.now(timezone.utc).isoformat(),
+        "observer": observer.get("username", "rss_observer"),
+        "status_count": len(statuses),
+        "source_counts": sources,
+        "dominant_source_share": max(sources.values(), default=0) / max(1, len(statuses)),
+        "statuses": sampled,
+    }
+    (STATE_DIR / "observer-report.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+    return report
+
 def published_timestamp(entry):
     value = entry.get("published", "")
     if not value:
@@ -247,6 +273,10 @@ def poll_once():
             record_outcome(connection, feed, "failed", str(error))
             connection.commit()
             print(f"[mastodon-rss] {feed['id']}: {error}", flush=True)
+    try:
+        sample_observer_timeline()
+    except (urllib.error.HTTPError, urllib.error.URLError, KeyError, ValueError, OSError) as error:
+        print(f"[mastodon-rss] observer timeline: {error}", flush=True)
 
 if __name__ == "__main__":
     if "--healthcheck" in sys.argv:

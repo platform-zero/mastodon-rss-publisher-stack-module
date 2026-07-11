@@ -82,6 +82,31 @@ class PublisherTest(unittest.TestCase):
             self.assertEqual(report["deduplicated_candidates"], 2)
             self.assertEqual(report["regional_candidates"]["AUS"], 1)
 
+    def test_observer_samples_home_timeline_and_reports_source_share(self):
+        class Response:
+            def read(self):
+                return json.dumps([
+                    {"id": "1", "created_at": "2026-07-11T00:00:00Z", "url": "https://mastodon.test/1", "account": {"acct": "rss_abc_news"}},
+                    {"id": "2", "created_at": "2026-07-11T00:01:00Z", "url": "https://mastodon.test/2", "account": {"acct": "rss_bbc_world"}},
+                ]).encode()
+            def __enter__(self):
+                return self
+            def __exit__(self, *args):
+                return False
+
+        with tempfile.TemporaryDirectory() as temporary:
+            original_state = publisher.STATE_DIR
+            publisher.STATE_DIR = Path(temporary)
+            (publisher.STATE_DIR / "observer.json").write_text(json.dumps({"username": "rss_observer", "token": "read-token"}))
+            try:
+                with patch.object(publisher.urllib.request, "urlopen", return_value=Response()):
+                    report = publisher.sample_observer_timeline()
+            finally:
+                publisher.STATE_DIR = original_state
+            self.assertEqual(report["status_count"], 2)
+            self.assertEqual(report["dominant_source_share"], 0.5)
+            self.assertEqual(report["source_counts"]["rss_abc_news"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
