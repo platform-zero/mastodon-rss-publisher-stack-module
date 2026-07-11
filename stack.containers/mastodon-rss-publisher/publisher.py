@@ -250,6 +250,10 @@ def poll_once():
                 request.add_header("If-None-Match", state[0])
             if state and state[1]:
                 request.add_header("If-Modified-Since", state[1])
+            # Several publishers reject Python's default urllib user agent even
+            # though their public RSS endpoint is otherwise healthy. Use the
+            # same explicit identity as Mastodon API publishing.
+            request.add_header("User-Agent", USER_AGENT)
             with urllib.request.urlopen(request, timeout=30) as response:
                 fetched = entries(response.read())
             existing = {row[0] for row in connection.execute("SELECT entry_id FROM seen WHERE feed_id = ?", (feed["id"],))}
