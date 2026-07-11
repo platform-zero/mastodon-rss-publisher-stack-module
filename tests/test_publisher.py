@@ -19,10 +19,16 @@ class PublisherTest(unittest.TestCase):
         self.assertEqual(publisher.entries(atom)[0]["link"], "https://example.test/two")
 
     def test_status_is_sanitized_and_limited(self):
-        value = publisher.status({"source": "Source"}, {"title": "Title", "summary": "<p>" + "x" * 600 + "</p>", "link": "https://example.test"})
+        value = publisher.status({"source": "Source", "region": "AUS"}, {"title": "Title", "summary": "<p>" + "x" * 600 + "</p>", "link": "https://example.test"})
         self.assertLessEqual(len(value), 500)
         self.assertNotIn("<p>", value)
-        self.assertIn("Source: Source", value)
+        self.assertIn("Source · Australia", value)
+        self.assertIn("#News #Australia", value)
+
+    def test_summary_repeating_title_is_omitted(self):
+        value = publisher.status({"source": "ABC", "region": "TAS"}, {"title": "Storm reaches Hobart", "summary": "Storm reaches Hobart with damaging winds", "link": "https://example.test"})
+        self.assertEqual(value.count("Storm reaches Hobart"), 1)
+        self.assertIn("ABC · Tasmania", value)
 
     def test_first_fetch_does_not_backfill_and_next_entry_posts(self):
         first = b"<rss><channel><item><guid>one</guid><title>One</title><link>https://example.test/one</link></item></channel></rss>"

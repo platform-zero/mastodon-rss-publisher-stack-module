@@ -60,6 +60,7 @@ services:
       MASTODON_RSS_API_URL: https://mastodon.${DOMAIN}
       MASTODON_RSS_POLL_SECONDS: ${MASTODON_RSS_POLL_SECONDS:-900}
       MASTODON_RSS_BUCKET_DAYS: ${MASTODON_RSS_BUCKET_DAYS:-7}
+      MASTODON_RSS_MAX_POSTS_PER_FEED_POLL: ${MASTODON_RSS_MAX_POSTS_PER_FEED_POLL:-2}
     volumes:
       - ./configs/mastodon-rss/feeds.d:/configs/mastodon-rss/feeds.d:ro
       - mastodon_rss_publisher_state:/state

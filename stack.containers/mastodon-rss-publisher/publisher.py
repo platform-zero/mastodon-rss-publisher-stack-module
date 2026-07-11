@@ -22,6 +22,7 @@ POLL_SECONDS = int(os.environ.get("MASTODON_RSS_POLL_SECONDS", "900"))
 BUCKET_DAYS = int(os.environ.get("MASTODON_RSS_BUCKET_DAYS", "7"))
 TITLE_SIMILARITY = float(os.environ.get("MASTODON_RSS_TITLE_SIMILARITY", "0.88"))
 USER_AGENT = "mastodon-rss-publisher/1.0"
+MAX_POSTS_PER_FEED_POLL = int(os.environ.get("MASTODON_RSS_MAX_POSTS_PER_FEED_POLL", "2"))
 
 def text(value):
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html.unescape(value or ""))).strip()
@@ -155,17 +156,31 @@ def write_calibration_report(connection):
     (STATE_DIR / "calibration-report.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     return report
 
+def concise_summary(value, budget):
+    value = text(value)
+    if len(value) <= budget:
+        return value
+    clipped = value[: max(0, budget - 1)].rsplit(" ", 1)[0].rstrip(" ,;:-")
+    return clipped + "…" if clipped else ""
+
 def status(feed, entry):
     title = text(entry["title"])
     title = title if len(title) <= 240 else title[:237] + "..."
-    fixed = [title, f"Source: {feed['source']}", entry["link"]]
+    region_labels = {"AUS": "Australia", "TAS": "Tasmania", "US": "United States", "WORLD": "World", "CHINA": "China", "CHINA_STATE": "China", "ANALYSIS": "Analysis"}
+    region_tags = {"AUS": "#Australia", "TAS": "#Tasmania", "US": "#USNews", "WORLD": "#WorldNews", "CHINA": "#China", "CHINA_STATE": "#China", "ANALYSIS": "#Analysis"}
+    region = feed.get("region", "WORLD")
+    attribution = f"{feed['source']} · {region_labels.get(region, region.title())}"
+    tags = " ".join(dict.fromkeys(["#News", region_tags.get(region, "#WorldNews")]))
+    fixed = [title, attribution, entry["link"], tags]
     fixed = [part for part in fixed if part]
     summary = text(entry["summary"])
+    if normalized_title(summary).startswith(normalized_title(title)):
+        summary = ""
     fixed_length = len("\n\n".join(fixed))
     if summary:
         budget = max(0, 500 - fixed_length - 2)
-        summary = summary if len(summary) <= budget else summary[: max(0, budget - 3)] + "..."
-    return "\n\n".join([entry["title"], summary, *fixed[1:]] if summary else fixed)
+        summary = concise_summary(summary, budget)
+    return "\n\n".join([title, summary, *fixed[1:]] if summary else fixed)
 
 def publish(token, value):
     request = urllib.request.Request(f"{API_URL}/api/v1/statuses", data=json.dumps({"status": value}).encode(), method="POST")
@@ -245,10 +260,13 @@ def poll_once():
                 connection.execute("INSERT INTO feeds(id, initialized) VALUES (?, 1)", (feed["id"],))
             elif initialized is not None and feed["account"] in credentials:
                 token = credentials[feed["account"]]["token"]
-                for item in reversed(fetched):
-                    if item["id"] not in existing:
+                unseen = [item for item in fetched if item["id"] not in existing]
+                selected = list(reversed(unseen[:MAX_POSTS_PER_FEED_POLL]))
+                for item in selected:
                         publish(token, status(feed, item))
-                        connection.execute("INSERT OR IGNORE INTO seen(feed_id, entry_id) VALUES (?, ?)", (feed["id"], item["id"]))
+                # Mark the whole fetched page seen so a busy source cannot drain a
+                # backlog over successive polls and dominate every home timeline.
+                connection.executemany("INSERT OR IGNORE INTO seen(feed_id, entry_id) VALUES (?, ?)", [(feed["id"], item["id"]) for item in unseen])
             connection.execute(
                 "INSERT INTO feed_state(id, etag, modified, failures, retry_after) VALUES (?, ?, ?, 0, 0) "
                 "ON CONFLICT(id) DO UPDATE SET etag=excluded.etag, modified=excluded.modified, failures=0, retry_after=0",
