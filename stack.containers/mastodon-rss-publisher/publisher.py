@@ -179,7 +179,7 @@ def status(feed, entry):
     fixed_length = len("\n\n".join(fixed))
     if summary:
         budget = max(0, 500 - fixed_length - 2)
-        summary = concise_summary(summary, budget)
+        summary = concise_summary(summary, min(budget, 160))
     return "\n\n".join([title, summary, *fixed[1:]] if summary else fixed)
 
 def publish(token, value):

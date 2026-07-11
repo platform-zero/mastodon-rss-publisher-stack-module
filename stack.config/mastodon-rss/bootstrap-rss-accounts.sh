@@ -11,6 +11,7 @@ require "securerandom"
 
 feed_dir = ENV.fetch("MASTODON_RSS_FEED_DIR")
 state_dir = ENV.fetch("MASTODON_RSS_STATE_DIR")
+avatar_path = ENV.fetch("MASTODON_RSS_AVATAR_PATH", "")
 feeds = Dir.glob(File.join(feed_dir, "*.json")).sort.flat_map do |path|
   JSON.parse(File.read(path)).fetch("feeds")
 end
@@ -27,6 +28,9 @@ feeds.each do |feed|
   account.display_name = feed.fetch("display_name")
   account.note = "Automated RSS feed for #{feed.fetch("source")}. Links point to the original publisher."
   account.discoverable = true
+  if !avatar_path.empty? && File.file?(avatar_path) && account.avatar_file_name.blank?
+    account.avatar = File.open(avatar_path)
+  end
   account.save!
 
   user = User.find_or_initialize_by(email: "rss+#{username}@#{ENV.fetch("LOCAL_DOMAIN")}")

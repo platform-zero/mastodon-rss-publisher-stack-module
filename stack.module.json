@@ -14,6 +14,7 @@
     "stack.config/components.json",
     "stack.config/mastodon-rss/feeds.d",
     "stack.config/mastodon-rss/bootstrap-rss-accounts.sh",
+    "stack.config/mastodon-rss/assets/rss-news-avatar.png",
     "stack.containers/mastodon-rss-publisher"
   ],
   "testAssets": []
