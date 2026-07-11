@@ -36,6 +36,7 @@ services:
       - ./configs/mastodon-rss/feeds.d:/configs/mastodon-rss/feeds.d:ro
       - ./configs/mastodon-rss/bootstrap-rss-accounts.sh:/opt/mastodon/bin/bootstrap-rss-accounts.sh:ro
       - ./configs/mastodon-rss/assets/rss-news-avatar.png:/configs/mastodon-rss/assets/rss-news-avatar.png:ro
+      - mastodon_public_system:/opt/mastodon/public/system
       - mastodon_rss_publisher_state:/state
     depends_on:
       mastodon-init:

@@ -28,7 +28,8 @@ feeds.each do |feed|
   account.display_name = feed.fetch("display_name")
   account.note = "Automated RSS feed for #{feed.fetch("source")}. Links point to the original publisher."
   account.discoverable = true
-  if !avatar_path.empty? && File.file?(avatar_path) && account.avatar_file_name.blank?
+  avatar_missing = account.avatar_file_name.blank? || !File.exist?(account.avatar.path.to_s)
+  if !avatar_path.empty? && File.file?(avatar_path) && avatar_missing
     account.avatar = File.open(avatar_path)
   end
   account.save!
