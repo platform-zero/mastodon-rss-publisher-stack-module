@@ -1,0 +1,48 @@
+{
+  "configuration": {
+    "schema": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    }
+  },
+  "id": "mastodon-rss-publisher",
+  "overlays": [
+    "stack.compose/mastodon-rss-publisher.yml",
+    "stack.config/components.json",
+    "stack.config/mastodon-rss/feeds.d",
+    "stack.config/mastodon-rss/bootstrap-rss-accounts.sh",
+    "stack.config/mastodon-rss/assets/rss-news-avatar.png",
+    "stack.containers/mastodon-rss-publisher"
+  ],
+  "provides": [
+    {
+      "capability": "module:mastodon-rss-publisher",
+      "version": "1"
+    }
+  ],
+  "requires": [
+    {
+      "capability": "module:mastodon",
+      "version": "1"
+    }
+  ],
+  "schemaVersion": 1,
+  "services": [
+    {
+      "name": "mastodon-rss-account-bootstrap",
+      "routes": [],
+      "volumes": []
+    },
+    {
+      "name": "mastodon-rss-publisher",
+      "routes": [],
+      "volumes": []
+    }
+  ],
+  "verification": {
+    "commands": [
+      "test -f stack.module.json && test -f module.json"
+    ]
+  }
+}
