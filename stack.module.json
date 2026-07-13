@@ -10,6 +10,9 @@
   "runtimeDependencies": [
     "mastodon"
   ],
+  "contracts": [
+    "module-contract"
+  ],
   "ciProfiles": [
     "module"
   ],
