@@ -4,9 +4,18 @@
   "repo": "mastodon-rss-publisher-stack-module",
   "runtimeId": "mastodon-rss-publisher",
   "lifecycle": "active",
-  "dependencies": ["mastodon"],
-  "runtimeDependencies": ["mastodon"],
-  "ciProfiles": ["module"],
+  "dependencies": [
+    "mastodon"
+  ],
+  "runtimeDependencies": [
+    "mastodon"
+  ],
+  "contracts": [
+    "module-contract"
+  ],
+  "ciProfiles": [
+    "module"
+  ],
   "smoke": "external-only",
   "smokeUnsupportedReason": "requires a running Mastodon database and local API service identities",
   "overlays": [
@@ -15,7 +24,8 @@
     "stack.config/mastodon-rss/feeds.d",
     "stack.config/mastodon-rss/bootstrap-rss-accounts.sh",
     "stack.config/mastodon-rss/assets/rss-news-avatar.png",
-    "stack.containers/mastodon-rss-publisher"
+    "stack.containers/mastodon-rss-publisher",
+    "stack.runtime.yaml"
   ],
   "testAssets": []
 }
