@@ -19,7 +19,6 @@
   "smoke": "external-only",
   "smokeUnsupportedReason": "requires a running Mastodon database and local API service identities",
   "overlays": [
-    "stack.compose/mastodon-rss-publisher.yml",
     "stack.config/components.json",
     "stack.config/mastodon-rss/feeds.d",
     "stack.config/mastodon-rss/bootstrap-rss-accounts.sh",
