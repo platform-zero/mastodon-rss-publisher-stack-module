@@ -6,7 +6,7 @@
       "name": "Mastodon RSS Publisher",
       "description": "Self-hosted RSS and Atom feeds published through local Mastodon accounts.",
       "dependencies": ["mastodon"],
-      "composeFiles": ["mastodon-rss-publisher.yml"]
+      "runtimeFiles": ["mastodon-rss-publisher.yml"]
     }
   }
 }
