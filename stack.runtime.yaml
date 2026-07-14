@@ -56,7 +56,7 @@ services:
     image: "webservices/mastodon-rss-publisher:local-build"
     build:
       context: "."
-      containerfile: "./stack.containers/mastodon-rss-publisher/Dockerfile"
+      containerfile: "./stack.containers/mastodon-rss-publisher/Containerfile"
     containerName: "mastodon-rss-publisher"
     lifecycle: "daemon"
     updatePolicy: "pinned"
