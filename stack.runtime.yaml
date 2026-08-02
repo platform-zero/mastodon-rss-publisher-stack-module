@@ -3,6 +3,20 @@ schemaVersion: 1
 module: "mastodon-rss-publisher"
 target: "apps"
 services:
+  mastodon-rss-state-init:
+    image: "alpine@sha256:310c62b5e7ca5b08167e4384c68db0fd2905dd9c7493756d356e893909057601"
+    containerName: "mastodon-rss-state-init"
+    lifecycle: "oneshot"
+    updatePolicy: "pinned"
+    placement: "rootful"
+    user: "0:10001"
+    volumes:
+    - "mastodon_rss_publisher_state:/state"
+    command:
+    - "sh"
+    - "-ec"
+    - "chgrp 10001 /state && chmod 2770 /state"
+    restart: "no"
   mastodon-rss-account-bootstrap:
     image: "ghcr.io/mastodon/mastodon:v4.5.4"
     containerName: "mastodon-rss-account-bootstrap"
@@ -11,8 +25,11 @@ services:
     placement: "rootful"
     dependencies:
       mastodon-init: "completed"
+      mastodon-rss-state-init: "completed"
       postgres-ssd-bootstrap: "completed"
       valkey: "healthy"
+    groupAdd:
+    - "10001"
     environment:
       LOCAL_DOMAIN: "mastodon.${DOMAIN}"
       WEB_DOMAIN: "mastodon.${DOMAIN}"
