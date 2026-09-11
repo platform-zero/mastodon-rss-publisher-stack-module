@@ -38,6 +38,7 @@ services:
       DB_PORT: 5432
       DB_NAME: "mastodon"
       DB_USER: "mastodon"
+      DB_PASS: "${POSTGRES_MASTODON_PASSWORD}"
       REDIS_HOST: "valkey"
       REDIS_PORT: 6379
       REDIS_USER: "mastodon"
@@ -66,7 +67,7 @@ services:
     command:
     - "bash"
     - "-c"
-    - "while true; do bash /opt/mastodon/bin/bootstrap-rss-accounts.sh || true; sleep\
+    - "while true; do bash /opt/mastodon/bin/bootstrap-rss-accounts.sh; sleep\
       \ 300; done"
     restart: "unless-stopped"
   mastodon-rss-publisher:

@@ -16,4 +16,12 @@ grep -Fq 'mastodon-rss-state-init:' "$repo_root/stack.runtime.yaml"
 grep -Fq 'chgrp 10001 /state && chmod 2770 /state' "$repo_root/stack.runtime.yaml"
 grep -Fq 'mastodon-rss-state-init: "completed"' "$repo_root/stack.runtime.yaml"
 grep -Fq -- '- "10001"' "$repo_root/stack.runtime.yaml"
+# This assertion intentionally matches a literal template expression.
+# shellcheck disable=SC2016
+grep -Fq 'DB_PASS: "${POSTGRES_MASTODON_PASSWORD}"' "$repo_root/stack.runtime.yaml"
+grep -Fq 'while true; do bash /opt/mastodon/bin/bootstrap-rss-accounts.sh; sleep' "$repo_root/stack.runtime.yaml"
+if grep -Fq 'bootstrap-rss-accounts.sh || true' "$repo_root/stack.runtime.yaml"; then
+  printf '[mastodon-rss-validate] bootstrap failures must not be suppressed\n' >&2
+  exit 1
+fi
 python3 -m unittest discover -s "$repo_root/tests" -p 'test_*.py'
