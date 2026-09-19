@@ -87,12 +87,14 @@ observer_token ||= Doorkeeper::AccessToken.create!(application_id: app.id, resou
 target = File.join(state_dir, "credentials.json")
 temporary = "#{target}.tmp-#{Process.pid}"
 File.write(temporary, JSON.generate(credentials))
-File.chmod(0o600, temporary)
+File.chown(nil, 10_001, temporary)
+File.chmod(0o640, temporary)
 File.rename(temporary, target)
 observer_target = File.join(state_dir, "observer.json")
 observer_temporary = "#{observer_target}.tmp-#{Process.pid}"
 File.write(observer_temporary, JSON.generate({ "username" => observer_account.username, "token" => observer_token.token, "following" => feeds.size }))
-File.chmod(0o600, observer_temporary)
+File.chown(nil, 10_001, observer_temporary)
+File.chmod(0o640, observer_temporary)
 File.rename(observer_temporary, observer_target)
 puts "[mastodon-rss] ensured #{credentials.size} local RSS accounts and observer follows #{feeds.size}"
 RUBY
