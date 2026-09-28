@@ -42,9 +42,13 @@ feeds.each do |feed|
   avatar_path = avatar_for(username)
   avatar_missing = account.avatar_file_name.blank? || !File.exist?(account.avatar.path.to_s)
   if avatar_missing || account.avatar_file_name != File.basename(avatar_path)
-    File.open(avatar_path) { |file| account.avatar = file }
+    File.open(avatar_path) do |file|
+      account.avatar = file
+      account.save!
+    end
+  else
+    account.save!
   end
-  account.save!
 
   user = User.find_or_initialize_by(email: "rss+#{username}@#{ENV.fetch("LOCAL_DOMAIN")}")
   user.account ||= account
@@ -76,9 +80,13 @@ observer_account.discoverable = false
 observer_avatar_path = avatar_for("rss_observer")
 observer_avatar_missing = observer_account.avatar_file_name.blank? || !File.exist?(observer_account.avatar.path.to_s)
 if observer_avatar_missing || observer_account.avatar_file_name != File.basename(observer_avatar_path)
-  File.open(observer_avatar_path) { |file| observer_account.avatar = file }
+  File.open(observer_avatar_path) do |file|
+    observer_account.avatar = file
+    observer_account.save!
+  end
+else
+  observer_account.save!
 end
-observer_account.save!
 
 observer_user = User.find_or_initialize_by(email: "rss+observer@#{ENV.fetch("LOCAL_DOMAIN")}")
 observer_user.account ||= observer_account
