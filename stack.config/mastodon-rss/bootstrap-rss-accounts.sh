@@ -12,6 +12,13 @@ require "securerandom"
 feed_dir = ENV.fetch("MASTODON_RSS_FEED_DIR")
 state_dir = ENV.fetch("MASTODON_RSS_STATE_DIR")
 avatar_path = ENV.fetch("MASTODON_RSS_AVATAR_PATH", "")
+def disable_bot_email(user)
+  %w[follow reblog favourite mention quote follow_request report pending_account trends appeal].each do |kind|
+    user.settings["notification_emails.#{kind}"] = false
+  end
+  user.settings["notification_emails.software_updates"] = "none"
+end
+
 feeds = Dir.glob(File.join(feed_dir, "*.json")).sort.flat_map do |path|
   JSON.parse(File.read(path)).fetch("feeds")
 end
@@ -36,13 +43,16 @@ feeds.each do |feed|
 
   user = User.find_or_initialize_by(email: "rss+#{username}@#{ENV.fetch("LOCAL_DOMAIN")}")
   user.account ||= account
-  user.password = SecureRandom.base64(48)
-  user.password_confirmation = user.password
+  if user.new_record?
+    user.password = SecureRandom.base64(48)
+    user.password_confirmation = user.password
+  end
   user.agreement = true if user.respond_to?(:agreement=)
   user.accepted_rules = true if user.respond_to?(:accepted_rules=)
   user.accepted_terms_at ||= Time.now.utc if user.respond_to?(:accepted_terms_at=)
   user.approved = true if user.respond_to?(:approved=)
   user.confirmed_at ||= Time.now.utc
+  disable_bot_email(user)
   user.save!
   updates = {}
   updates[:approved] = true if user.has_attribute?(:approved)
@@ -62,13 +72,16 @@ observer_account.save!
 
 observer_user = User.find_or_initialize_by(email: "rss+observer@#{ENV.fetch("LOCAL_DOMAIN")}")
 observer_user.account ||= observer_account
-observer_user.password = SecureRandom.base64(48)
-observer_user.password_confirmation = observer_user.password
+if observer_user.new_record?
+  observer_user.password = SecureRandom.base64(48)
+  observer_user.password_confirmation = observer_user.password
+end
 observer_user.agreement = true if observer_user.respond_to?(:agreement=)
 observer_user.accepted_rules = true if observer_user.respond_to?(:accepted_rules=)
 observer_user.accepted_terms_at ||= Time.now.utc if observer_user.respond_to?(:accepted_terms_at=)
 observer_user.approved = true if observer_user.respond_to?(:approved=)
 observer_user.confirmed_at ||= Time.now.utc
+disable_bot_email(observer_user)
 observer_user.save!
 observer_updates = {}
 observer_updates[:approved] = true if observer_user.has_attribute?(:approved)
