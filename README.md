@@ -16,3 +16,19 @@ fetched dated item is retained in a rolling seven-day candidate bucket and
 reported at `/state/calibration-report.json`; collection never posts history.
 The Australian share is a calibration report for roster review, not a
 continuously enforced posting quota.
+
+## RSS account avatars
+
+Each feed account has a versioned 512 × 512 PNG in
+`stack.config/mastodon-rss/assets`. The image pairs its publisher's site icon
+(where the publisher serves one) with the feed display name and a small `bot`
+mark. `sources.json` records the publisher icon URL for each image; a null URL
+means the publisher name is rendered as text. The observer gets its own image.
+The account bootstrap updates an avatar when its image filename changes, so a
+new image is applied to existing accounts on the next bootstrap run.
+
+To regenerate the files after adding a feed or changing the artwork, run
+`uv run --with pillow --with cairosvg python scripts/build-avatars.py` from a
+workspace with the RSS feed modules checked out beside this module. Review the
+resulting images before committing them. The script fetches icons from
+publisher websites and places a `bot` watermark over each card.

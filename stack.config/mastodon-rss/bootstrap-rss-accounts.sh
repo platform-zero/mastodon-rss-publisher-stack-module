@@ -35,9 +35,10 @@ feeds.each do |feed|
   account.display_name = feed.fetch("display_name")
   account.note = "Automated RSS feed for #{feed.fetch("source")}. Links point to the original publisher."
   account.discoverable = true
+  avatar_path = avatar_for(username)
   avatar_missing = account.avatar_file_name.blank? || !File.exist?(account.avatar.path.to_s)
-  if !avatar_path.empty? && File.file?(avatar_path) && avatar_missing
-    account.avatar = File.open(avatar_path)
+  if avatar_missing || account.avatar_file_name != File.basename(avatar_path)
+    File.open(avatar_path) { |file| account.avatar = file }
   end
   account.save!
 
@@ -68,6 +69,11 @@ observer_account = Account.find_or_initialize_by(username: "rss_observer", domai
 observer_account.display_name = "RSS Timeline Observer"
 observer_account.note = "Automated service account used to verify the RSS home timeline."
 observer_account.discoverable = false
+observer_avatar_path = avatar_for("rss_observer")
+observer_avatar_missing = observer_account.avatar_file_name.blank? || !File.exist?(observer_account.avatar.path.to_s)
+if observer_avatar_missing || observer_account.avatar_file_name != File.basename(observer_avatar_path)
+  File.open(observer_avatar_path) { |file| observer_account.avatar = file }
+end
 observer_account.save!
 
 observer_user = User.find_or_initialize_by(email: "rss+observer@#{ENV.fetch("LOCAL_DOMAIN")}")

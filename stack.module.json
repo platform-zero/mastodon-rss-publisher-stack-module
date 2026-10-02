@@ -22,7 +22,7 @@
     "stack.config/components.json",
     "stack.config/mastodon-rss/feeds.d",
     "stack.config/mastodon-rss/bootstrap-rss-accounts.sh",
-    "stack.config/mastodon-rss/assets/rss-news-avatar.png",
+    "stack.config/mastodon-rss/assets",
     "stack.containers/mastodon-rss-publisher",
     "stack.runtime.yaml"
   ],

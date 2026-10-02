@@ -26,4 +26,5 @@ if grep -Fq 'bootstrap-rss-accounts.sh || true' "$repo_root/stack.runtime.yaml";
   printf '[mastodon-rss-validate] bootstrap failures must not be suppressed\n' >&2
   exit 1
 fi
+python3 "$repo_root/tests/check_avatars.py"
 python3 -m unittest discover -s "$repo_root/tests" -p 'test_*.py'
