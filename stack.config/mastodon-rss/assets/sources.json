@@ -1,0 +1,290 @@
+[
+  {
+    "account": "rss_972_magazine",
+    "source": "972 Magazine",
+    "avatar": "rss_972_magazine-0a08d84ea3ca.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_abc_news",
+    "source": "ABC News",
+    "avatar": "rss_abc_news-d66f848ae4f7.png",
+    "publisher_icon": "https://www.abc.net.au/news-assets/touchicon-abc.png"
+  },
+  {
+    "account": "rss_abc_tas",
+    "source": "ABC News",
+    "avatar": "rss_abc_tas-6d16825f3661.png",
+    "publisher_icon": "https://www.abc.net.au/news-assets/touchicon-abc.png"
+  },
+  {
+    "account": "rss_amnesty",
+    "source": "Amnesty International",
+    "avatar": "rss_amnesty-ff69fd29b7d0.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_ars_technica",
+    "source": "Ars Technica",
+    "avatar": "rss_ars_technica-ffdfbfc28f28.png",
+    "publisher_icon": "https://cdn.arstechnica.net/wp-content/uploads/2016/10/cropped-ars-logo-512_480-300x300.png"
+  },
+  {
+    "account": "rss_atlantic",
+    "source": "The Atlantic",
+    "avatar": "rss_atlantic-584ed14accd4.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_australia_institute",
+    "source": "The Australia Institute",
+    "avatar": "rss_australia_institute-69aaa537dbbe.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_bbc_world",
+    "source": "BBC News",
+    "avatar": "rss_bbc_world-a2c92a94ee36.png",
+    "publisher_icon": "https://static.files.bbci.co.uk/bbcdotcom/web/20260922-091849-a8520cb5b4-web-3.22.0-3/apple-touch-icon.png"
+  },
+  {
+    "account": "rss_bellingcat",
+    "source": "Bellingcat",
+    "avatar": "rss_bellingcat-a6b2c2e1bf3c.png",
+    "publisher_icon": "https://www.bellingcat.com/app/themes/bellingcat/assets/icons/favicons/apple-touch-icon-1024x1024.png"
+  },
+  {
+    "account": "rss_cgtn_business",
+    "source": "CGTN",
+    "avatar": "rss_cgtn_business-34903ff87859.png",
+    "publisher_icon": "https://www.cgtn.com/favicon.ico"
+  },
+  {
+    "account": "rss_cgtn_china",
+    "source": "CGTN",
+    "avatar": "rss_cgtn_china-ac4a9efe025d.png",
+    "publisher_icon": "https://www.cgtn.com/favicon.ico"
+  },
+  {
+    "account": "rss_cgtn_politics",
+    "source": "CGTN",
+    "avatar": "rss_cgtn_politics-a30267d0d484.png",
+    "publisher_icon": "https://www.cgtn.com/favicon.ico"
+  },
+  {
+    "account": "rss_cgtn_world",
+    "source": "CGTN",
+    "avatar": "rss_cgtn_world-581772002763.png",
+    "publisher_icon": "https://www.cgtn.com/favicon.ico"
+  },
+  {
+    "account": "rss_china_digital_times",
+    "source": "China Digital Times",
+    "avatar": "rss_china_digital_times-500ffbaa6c91.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_conversation_au",
+    "source": "The Conversation",
+    "avatar": "rss_conversation_au-3b75e6d9f867.png",
+    "publisher_icon": "https://images.theconversation.com/files/581997/original/9275d5c0-7dd5-4ddf-b50b-98d537e016f4.png"
+  },
+  {
+    "account": "rss_crikey",
+    "source": "Crikey",
+    "avatar": "rss_crikey-1bdd122b0944.png",
+    "publisher_icon": "https://assets.crikey.com.au/wp-content/uploads/sites/3/2021/08/cropped-android-chrome-512x512-1.png?quality=70&w=180"
+  },
+  {
+    "account": "rss_crisis_group",
+    "source": "International Crisis Group",
+    "avatar": "rss_crisis_group-6a4aa38d5085.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_diplomat_china",
+    "source": "The Diplomat",
+    "avatar": "rss_diplomat_china-0af6a8b295d0.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_examiner_tas",
+    "source": "The Examiner",
+    "avatar": "rss_examiner_tas-4a855ef4555a.png",
+    "publisher_icon": "https://www.examiner.com.au/static/1790049337/sites/the-examiner/ico/apple-touch-icon-114x114-precomposed.png"
+  },
+  {
+    "account": "rss_guardian_australia",
+    "source": "The Guardian",
+    "avatar": "rss_guardian_australia-43f7a93767e6.png",
+    "publisher_icon": "https://assets.guim.co.uk/static/frontend/icons/homescreen/apple-touch-icon-512.png"
+  },
+  {
+    "account": "rss_guardian_china",
+    "source": "The Guardian",
+    "avatar": "rss_guardian_china-73da686c9289.png",
+    "publisher_icon": "https://assets.guim.co.uk/static/frontend/icons/homescreen/apple-touch-icon-512.png"
+  },
+  {
+    "account": "rss_guardian_us",
+    "source": "The Guardian",
+    "avatar": "rss_guardian_us-a41165f96df4.png",
+    "publisher_icon": "https://assets.guim.co.uk/static/frontend/icons/homescreen/apple-touch-icon-512.png"
+  },
+  {
+    "account": "rss_hrw_news",
+    "source": "Human Rights Watch",
+    "avatar": "rss_hrw_news-1895e8f484a7.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_lemonde_us",
+    "source": "Le Monde",
+    "avatar": "rss_lemonde_us-e25339ba9ded.png",
+    "publisher_icon": "https://www.lemonde.fr/bucket/resources/front/static/img/logos/pwa-180.png"
+  },
+  {
+    "account": "rss_middle_east_eye",
+    "source": "Middle East Eye",
+    "avatar": "rss_middle_east_eye-a083e9700109.png",
+    "publisher_icon": "https://www.middleeasteye.net/sites/default/files/MEE%20Purple.png"
+  },
+  {
+    "account": "rss_mother_jones",
+    "source": "Mother Jones",
+    "avatar": "rss_mother_jones-713ac8bad4f8.png",
+    "publisher_icon": "https://www.motherjones.com/wp-content/uploads/2017/09/cropped-favicon-512x512.png?w=180"
+  },
+  {
+    "account": "rss_nature",
+    "source": "Nature",
+    "avatar": "rss_nature-b2bed7c276e8.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_new_yorker",
+    "source": "The New Yorker",
+    "avatar": "rss_new_yorker-bb361b29e699.png",
+    "publisher_icon": "https://www.newyorker.com/verso/static/thenewyorker-us/assets/favicon.ico"
+  },
+  {
+    "account": "rss_npr_national",
+    "source": "NPR",
+    "avatar": "rss_npr_national-4773baf65312.png",
+    "publisher_icon": "https://media.npr.org/chrome/favicon/favicon-180x180.png"
+  },
+  {
+    "account": "rss_npr_politics",
+    "source": "NPR",
+    "avatar": "rss_npr_politics-1c897aee0179.png",
+    "publisher_icon": "https://media.npr.org/chrome/favicon/favicon-180x180.png"
+  },
+  {
+    "account": "rss_npr_world",
+    "source": "NPR",
+    "avatar": "rss_npr_world-a2b09df9ace1.png",
+    "publisher_icon": "https://media.npr.org/chrome/favicon/favicon-180x180.png"
+  },
+  {
+    "account": "rss_nyt_politics",
+    "source": "The New York Times",
+    "avatar": "rss_nyt_politics-ad54bf1574f4.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_nyt_us",
+    "source": "The New York Times",
+    "avatar": "rss_nyt_us-853b25d8095b.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_pbs_headlines",
+    "source": "PBS NewsHour",
+    "avatar": "rss_pbs_headlines-c01f955e94bb.png",
+    "publisher_icon": "https://d3i6fh83elv35t.cloudfront.net/static/assets/images/favicon/2024/apple-touch-icon.png"
+  },
+  {
+    "account": "rss_pbs_politics",
+    "source": "PBS NewsHour",
+    "avatar": "rss_pbs_politics-f0e02577bbc3.png",
+    "publisher_icon": "https://d3i6fh83elv35t.cloudfront.net/static/assets/images/favicon/2024/apple-touch-icon.png"
+  },
+  {
+    "account": "rss_propublica_us",
+    "source": "ProPublica",
+    "avatar": "rss_propublica_us-6719ee278201.png",
+    "publisher_icon": "https://www.propublica.org/wp-content/uploads/2026/07/Frame-2.png?w=180"
+  },
+  {
+    "account": "rss_reason",
+    "source": "Reason",
+    "avatar": "rss_reason-a857f9a24840.png",
+    "publisher_icon": "https://d2eehagpk5cl65.cloudfront.net/wp-content/themes/reason-dot-com-theme/dist/favicon/apple-icon-180x180_ed57c890.png"
+  },
+  {
+    "account": "rss_reliefweb",
+    "source": "ReliefWeb",
+    "avatar": "rss_reliefweb-0edb27c4c81a.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_renew_economy",
+    "source": "Renew Economy",
+    "avatar": "rss_renew_economy-0275a26038ec.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_rest_of_world",
+    "source": "Rest of World",
+    "avatar": "rss_rest_of_world-5d249b4dd247.png",
+    "publisher_icon": "https://restofworld.org/wp-content/themes/orbis/assets/icons/icon-180.png?1"
+  },
+  {
+    "account": "rss_sbs_news",
+    "source": "SBS News",
+    "avatar": "rss_sbs_news-5cec0981223c.png",
+    "publisher_icon": "https://www.sbs.com.au/_next/static/media/app-icon_512x512.9cff3dc8.png"
+  },
+  {
+    "account": "rss_science",
+    "source": "Science",
+    "avatar": "rss_science-72aa966d838e.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_scmp_china",
+    "source": "South China Morning Post",
+    "avatar": "rss_scmp_china-0f8976fd1868.png",
+    "publisher_icon": "https://assets-v2.i-scmp.com/production/icons/scmp-icon-192x192.png"
+  },
+  {
+    "account": "rss_tasmanian_times",
+    "source": "Tasmanian Times",
+    "avatar": "rss_tasmanian_times-17036a26500c.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_times_of_israel",
+    "source": "Times of Israel",
+    "avatar": "rss_times_of_israel-5320a8bcad75.png",
+    "publisher_icon": null
+  },
+  {
+    "account": "rss_vox",
+    "source": "Vox",
+    "avatar": "rss_vox-93d699393c4d.png",
+    "publisher_icon": "https://www.vox.com/static-assets/icons/apple-touch-icon.png"
+  },
+  {
+    "account": "rss_washpost_politics",
+    "source": "The Washington Post",
+    "avatar": "rss_washpost_politics-df8a6e31f4e8.png",
+    "publisher_icon": "https://www.washingtonpost.com/touch-icon-iphone-retina.png"
+  },
+  {
+    "account": "rss_observer",
+    "source": "RSS Timeline Observer",
+    "avatar": "rss_observer-baa2d1ebf8b0.png",
+    "publisher_icon": null
+  }
+]

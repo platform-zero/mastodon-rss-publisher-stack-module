@@ -15,7 +15,7 @@ services:
     command:
     - "sh"
     - "-ec"
-    - "chgrp 10001 /state && chmod 2770 /state"
+    - "chgrp 10001 /state && chmod 2770 /state; for file in /state/credentials.json /state/observer.json; do [ ! -e \"$file\" ] || { chgrp 10001 \"$file\" && chmod 0640 \"$file\"; }; done"
     restart: "no"
   mastodon-rss-account-bootstrap:
     image: "ghcr.io/mastodon/mastodon:v4.5.4"
@@ -51,7 +51,7 @@ services:
       SSL_CERT_FILE: "/ca/caddy-ca.crt"
       MASTODON_RSS_FEED_DIR: "/configs/mastodon-rss/feeds.d"
       MASTODON_RSS_STATE_DIR: "/state"
-      MASTODON_RSS_AVATAR_PATH: "/configs/mastodon-rss/assets/rss-news-avatar.png"
+      MASTODON_RSS_AVATAR_DIR: "/configs/mastodon-rss/assets"
     networks:
     - "internet"
     - "postgres"
@@ -61,7 +61,7 @@ services:
     - "caddy_ca:/ca:ro"
     - "./configs/mastodon-rss/feeds.d:/configs/mastodon-rss/feeds.d:ro"
     - "./configs/mastodon-rss/bootstrap-rss-accounts.sh:/opt/mastodon/bin/bootstrap-rss-accounts.sh:ro"
-    - "./configs/mastodon-rss/assets/rss-news-avatar.png:/configs/mastodon-rss/assets/rss-news-avatar.png:ro"
+    - "./configs/mastodon-rss/assets:/configs/mastodon-rss/assets:ro"
     - "mastodon_public_system:/opt/mastodon/public/system"
     - "mastodon_rss_publisher_state:/state"
     command:

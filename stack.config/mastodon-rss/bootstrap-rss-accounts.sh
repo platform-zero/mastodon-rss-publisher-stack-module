@@ -12,6 +12,13 @@ require "securerandom"
 feed_dir = ENV.fetch("MASTODON_RSS_FEED_DIR")
 state_dir = ENV.fetch("MASTODON_RSS_STATE_DIR")
 avatar_path = ENV.fetch("MASTODON_RSS_AVATAR_PATH", "")
+def disable_bot_email(user)
+  %w[follow reblog favourite mention quote follow_request report pending_account trends appeal].each do |kind|
+    user.settings["notification_emails.#{kind}"] = false
+  end
+  user.settings["notification_emails.software_updates"] = "none"
+end
+
 feeds = Dir.glob(File.join(feed_dir, "*.json")).sort.flat_map do |path|
   JSON.parse(File.read(path)).fetch("feeds")
 end
@@ -28,21 +35,29 @@ feeds.each do |feed|
   account.display_name = feed.fetch("display_name")
   account.note = "Automated RSS feed for #{feed.fetch("source")}. Links point to the original publisher."
   account.discoverable = true
+  avatar_path = avatar_for(username)
   avatar_missing = account.avatar_file_name.blank? || !File.exist?(account.avatar.path.to_s)
-  if !avatar_path.empty? && File.file?(avatar_path) && avatar_missing
-    account.avatar = File.open(avatar_path)
+  if avatar_missing || account.avatar_file_name != File.basename(avatar_path)
+    File.open(avatar_path) do |file|
+      account.avatar = file
+      account.save!
+    end
+  else
+    account.save!
   end
-  account.save!
 
   user = User.find_or_initialize_by(email: "rss+#{username}@#{ENV.fetch("LOCAL_DOMAIN")}")
   user.account ||= account
-  user.password = SecureRandom.base64(48)
-  user.password_confirmation = user.password
+  if user.new_record?
+    user.password = SecureRandom.base64(48)
+    user.password_confirmation = user.password
+  end
   user.agreement = true if user.respond_to?(:agreement=)
   user.accepted_rules = true if user.respond_to?(:accepted_rules=)
   user.accepted_terms_at ||= Time.now.utc if user.respond_to?(:accepted_terms_at=)
   user.approved = true if user.respond_to?(:approved=)
   user.confirmed_at ||= Time.now.utc
+  disable_bot_email(user)
   user.save!
   updates = {}
   updates[:approved] = true if user.has_attribute?(:approved)
@@ -58,17 +73,29 @@ observer_account = Account.find_or_initialize_by(username: "rss_observer", domai
 observer_account.display_name = "RSS Timeline Observer"
 observer_account.note = "Automated service account used to verify the RSS home timeline."
 observer_account.discoverable = false
-observer_account.save!
+observer_avatar_path = avatar_for("rss_observer")
+observer_avatar_missing = observer_account.avatar_file_name.blank? || !File.exist?(observer_account.avatar.path.to_s)
+if observer_avatar_missing || observer_account.avatar_file_name != File.basename(observer_avatar_path)
+  File.open(observer_avatar_path) do |file|
+    observer_account.avatar = file
+    observer_account.save!
+  end
+else
+  observer_account.save!
+end
 
 observer_user = User.find_or_initialize_by(email: "rss+observer@#{ENV.fetch("LOCAL_DOMAIN")}")
 observer_user.account ||= observer_account
-observer_user.password = SecureRandom.base64(48)
-observer_user.password_confirmation = observer_user.password
+if observer_user.new_record?
+  observer_user.password = SecureRandom.base64(48)
+  observer_user.password_confirmation = observer_user.password
+end
 observer_user.agreement = true if observer_user.respond_to?(:agreement=)
 observer_user.accepted_rules = true if observer_user.respond_to?(:accepted_rules=)
 observer_user.accepted_terms_at ||= Time.now.utc if observer_user.respond_to?(:accepted_terms_at=)
 observer_user.approved = true if observer_user.respond_to?(:approved=)
 observer_user.confirmed_at ||= Time.now.utc
+disable_bot_email(observer_user)
 observer_user.save!
 observer_updates = {}
 observer_updates[:approved] = true if observer_user.has_attribute?(:approved)
@@ -87,12 +114,14 @@ observer_token ||= Doorkeeper::AccessToken.create!(application_id: app.id, resou
 target = File.join(state_dir, "credentials.json")
 temporary = "#{target}.tmp-#{Process.pid}"
 File.write(temporary, JSON.generate(credentials))
-File.chmod(0o600, temporary)
+File.chown(nil, 10_001, temporary)
+File.chmod(0o640, temporary)
 File.rename(temporary, target)
 observer_target = File.join(state_dir, "observer.json")
 observer_temporary = "#{observer_target}.tmp-#{Process.pid}"
 File.write(observer_temporary, JSON.generate({ "username" => observer_account.username, "token" => observer_token.token, "following" => feeds.size }))
-File.chmod(0o600, observer_temporary)
+File.chown(nil, 10_001, observer_temporary)
+File.chmod(0o640, observer_temporary)
 File.rename(observer_temporary, observer_target)
 puts "[mastodon-rss] ensured #{credentials.size} local RSS accounts and observer follows #{feeds.size}"
 RUBY
