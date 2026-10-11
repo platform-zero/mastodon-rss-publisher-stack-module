@@ -58,7 +58,7 @@ services:
     - "valkey"
     - "mastodon-internal"
     volumes:
-    - "caddy_ca:/ca:ro"
+    - "${STACK_VOLUME_ROOT}/caddy_ca:/ca:ro"
     - "./configs/mastodon-rss/feeds.d:/configs/mastodon-rss/feeds.d:ro"
     - "./configs/mastodon-rss/bootstrap-rss-accounts.sh:/opt/mastodon/bin/bootstrap-rss-accounts.sh:ro"
     - "./configs/mastodon-rss/assets:/configs/mastodon-rss/assets:ro"
@@ -69,6 +69,21 @@ services:
     - "-c"
     - "while true; do bash /opt/mastodon/bin/bootstrap-rss-accounts.sh; sleep\
       \ 300; done"
+    health:
+      test:
+      - "CMD-SHELL"
+      - >-
+        ruby -rjson -e 'begin;
+        feeds = Dir.glob(File.join(ENV.fetch("MASTODON_RSS_FEED_DIR"), "*.json")).flat_map { |p| JSON.parse(File.read(p)).fetch("feeds") };
+        state = ENV.fetch("MASTODON_RSS_STATE_DIR");
+        credentials = JSON.parse(File.read(File.join(state, "credentials.json")));
+        observer = JSON.parse(File.read(File.join(state, "observer.json")));
+        exit((credentials.keys.sort == feeds.map { |f| f.fetch("account").downcase }.uniq.sort && observer.fetch("following") == feeds.size && observer.fetch("token").is_a?(String) && !observer.fetch("token").empty?) ? 0 : 1);
+        rescue StandardError; exit 1; end'
+      interval: "30s"
+      timeout: "10s"
+      retries: 10
+      start_period: "300s"
     restart: "unless-stopped"
   mastodon-rss-publisher:
     image: "webservices/mastodon-rss-publisher:local-build"
@@ -88,12 +103,16 @@ services:
       MASTODON_RSS_POLL_SECONDS: "${MASTODON_RSS_POLL_SECONDS:-900}"
       MASTODON_RSS_BUCKET_DAYS: "${MASTODON_RSS_BUCKET_DAYS:-7}"
       MASTODON_RSS_MAX_POSTS_PER_FEED_POLL: "${MASTODON_RSS_MAX_POSTS_PER_FEED_POLL:-2}"
+      SSL_CERT_FILE: "/ca/caddy-ca.crt"
+    extraHosts:
+    - "mastodon.${DOMAIN}:host-gateway"
     networks:
     - "internet"
     - "mastodon-internal"
     volumes:
     - "./configs/mastodon-rss/feeds.d:/configs/mastodon-rss/feeds.d:ro"
     - "mastodon_rss_publisher_state:/state"
+    - "${STACK_VOLUME_ROOT}/caddy_ca:/ca:ro"
     health:
       test:
       - "CMD"

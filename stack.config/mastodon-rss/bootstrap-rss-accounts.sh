@@ -11,7 +11,19 @@ require "securerandom"
 
 feed_dir = ENV.fetch("MASTODON_RSS_FEED_DIR")
 state_dir = ENV.fetch("MASTODON_RSS_STATE_DIR")
-avatar_path = ENV.fetch("MASTODON_RSS_AVATAR_PATH", "")
+def avatar_for(username)
+  root = File.expand_path(ENV.fetch("MASTODON_RSS_AVATAR_DIR"))
+  sources = JSON.parse(File.read(File.join(root, "sources.json")))
+  entry = sources.find { |item| item.fetch("account") == username }
+  raise "missing declared avatar for RSS account" unless entry
+  filename = entry.fetch("avatar")
+  expected = /\A#{Regexp.escape(username)}-[0-9a-f]{12}\.png\z/
+  raise "invalid declared RSS avatar filename" unless expected.match?(filename)
+  path = File.join(root, filename)
+  raise "missing declared RSS avatar file" unless File.file?(path) && !File.symlink?(path)
+  path
+end
+
 def disable_bot_email(user)
   %w[follow reblog favourite mention quote follow_request report pending_account trends appeal].each do |kind|
     user.settings["notification_emails.#{kind}"] = false
