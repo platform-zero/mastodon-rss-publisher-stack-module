@@ -18,7 +18,7 @@ services:
     - "chgrp 10001 /state && chmod 2770 /state; for file in /state/credentials.json /state/observer.json; do [ ! -e \"$file\" ] || { chgrp 10001 \"$file\" && chmod 0640 \"$file\"; }; done"
     restart: "no"
   mastodon-rss-account-bootstrap:
-    image: "ghcr.io/mastodon/mastodon:v4.5.4"
+    image: "ghcr.io/mastodon/mastodon:v4.5.4@sha256:16def7e8dec489a487694e00a6e360beee73ae883c312a683df81c490564495f"
     containerName: "mastodon-rss-account-bootstrap"
     lifecycle: "daemon"
     updatePolicy: "registry"
